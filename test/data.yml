@@ -5,3 +5,34 @@
 #   email: bob@gmail.com
 #   password: secret
 #   fullname: Bob
+
+Topic(linked_list):
+    title:    "Linked List"
+    description:    "Description of Linked List"
+
+Topic(queue):
+    title:    "Queue"
+    description:    "Description of Queue"
+
+Topic(stack):
+    title:    "Stack"
+    description:    "Description for Stack"
+
+Topic(graph):
+    title:    "Graph"
+    description:    "Description for Graph"
+
+Competency(datastructures_basic):
+    title:    "Data Structures Basic"
+    description:    "Data Structures Basic Description"
+    topics:    [stack, queue]
+
+Competency(datastructures_advanced):
+    title:    "Data Structures Advanced"
+    description:    "Data Structures Advanced Description"
+    topics:    [linked_list, graph]
+
+CompetencyGroup(datastructures):
+    title:    "Data Structures"
+    description:    "Data Structures Description"
+    competencies:    [datastructures_basic, datastructures_advanced]
