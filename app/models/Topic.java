@@ -15,7 +15,6 @@ import play.db.jpa.Model;
 @Entity
 public class Topic extends Model implements Comparable {
     
-	//TODO: Add database constraint to ensure that this cannot be set to null
 	@Required
 	@Column(nullable=false)
 	public String title;

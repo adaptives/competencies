@@ -11,15 +11,17 @@ import javax.persistence.OneToMany;
 
 import play.data.validation.Required;
 import play.db.jpa.Model;
+import utils.StringUtils;
 
 @Entity
 public class Competency extends Model {
-	
-	//TODO: Add database constraint to ensure that this cannot be set to null
+		
 	@Required
+	@Column(nullable=false)
     public String title;       
     
     //TODO: Set in the constructor... see BlogPost.java in Sole
+	@Column(nullable=false)
     public String sanitizedTitle;
     
     @Lob
@@ -28,6 +30,7 @@ public class Competency extends Model {
     @Lob
     public String resources;
     
+    @Column(nullable=false)
     public Integer placement;
     
     //TODO: Set database constraints to ensure that this is not nullable
@@ -54,6 +57,7 @@ public class Competency extends Model {
     				  String resources) {
         super();
         this.title = title;
+        this.sanitizedTitle = StringUtils.replaceSpaceWithDashes(title);
         this.description = description;
         this.competencyGroup = competencyGroup;
         this.level = level;
