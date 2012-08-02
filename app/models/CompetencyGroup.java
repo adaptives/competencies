@@ -1,8 +1,7 @@
 package models;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,16 +9,24 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import play.data.validation.Required;
 import play.db.jpa.Model;
 
 @Entity
 public class CompetencyGroup extends Model {
-    public String title;
-    public String description;
+    
+	//TODO: Add database constraint to ensure that this cannot be set to null
+	@Required
+	public String title;
+    
+	public String description;
+     
+	public Integer placement;
     
     @ManyToOne
     public Topic topic;
     
+    //TODO: order by placement
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "competencyGroup")
     public Set<Competency> competencies;
     
@@ -31,14 +38,15 @@ public class CompetencyGroup extends Model {
     @Lob
     public String resources;
 
-    public CompetencyGroup(String title, 
+    public CompetencyGroup(String title,
     					   String description,
     					   String resources) {
         super();
         this.title = title;
         this.description = description;
         this.resources = resources;
-        this.competencies = new TreeSet<Competency>();
-        this.prereqisites = new TreeSet<CompetencyGroup>();
+        this.placement = 0;
+        this.competencies = new HashSet<Competency>();
+        this.prereqisites = new HashSet<CompetencyGroup>();        
     }
 }
