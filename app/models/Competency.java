@@ -40,7 +40,7 @@ public class Competency extends Model {
 
     @Required
     @ManyToOne
-    @Column(nullable=false)
+    //TODO: How do we make this required
     public CompetencyGroup competencyGroup;
     
     //TODO: If a Competency has been specified as a prerequsite for this

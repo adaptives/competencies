@@ -26,6 +26,14 @@ public class Level extends Model implements Comparable {
 	@Override
 	public int compareTo(Object o) {
 		Level other = (Level)o;
-		return this.placement - other.placement;
+		//we do not want to return a 0 if both the placement values are the same
+		//because that will make the TreeSet think these are equal objects and
+		//one of them will not be added. If placements are equal then we 
+		//compare by title
+		if(this.placement == other.placement) {
+			return this.title.compareTo(other.title);
+		} else {
+			return this.placement - other.placement;
+		}
 	}
 }
