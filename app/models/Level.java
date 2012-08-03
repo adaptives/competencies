@@ -1,5 +1,6 @@
 package models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import play.data.validation.Required;
@@ -10,6 +11,7 @@ public class Level extends Model implements Comparable {
 	
 	//TODO: Add database constraint to ensure that this cannot be set to null
 	@Required
+    @Column(nullable=false)
 	public String title;
 	
 	public String description;

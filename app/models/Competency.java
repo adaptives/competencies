@@ -1,7 +1,7 @@
 package models;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,7 +48,6 @@ public class Competency extends Model {
     @OneToMany
     public Set<Competency> prerequisites;
     
-    
 
     public Competency(String title,
     				  String description,  
@@ -63,6 +62,8 @@ public class Competency extends Model {
         this.level = level;
         this.resources = resources;
         this.placement = 0;
-        this.prerequisites = new HashSet<Competency>();
+        this.prerequisites = new TreeSet<Competency>();
     }
+
+    // TODO: implement compareTo
 }
