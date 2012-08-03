@@ -101,4 +101,9 @@ public class Topic extends Model implements Comparable {
 			return this.placement - other.placement;
 		}
 	}
+    
+    @Override
+    public String toString() {
+    	return this.id + " : " + this.title;
+    }
 }

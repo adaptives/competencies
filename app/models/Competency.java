@@ -66,4 +66,9 @@ public class Competency extends Model {
     }
 
     // TODO: implement compareTo
+    
+    @Override
+    public String toString() {
+    	return this.id + " : " + this.title;
+    }
 }
