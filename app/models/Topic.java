@@ -10,11 +10,15 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.PersistenceException;
 
 import play.data.validation.Required;
+import play.db.jpa.JPABase;
 import play.db.jpa.Model;
 
 @Entity
@@ -35,16 +39,17 @@ public class Topic extends Model implements Comparable {
     @OrderBy("placement")
     public Set<CompetencyGroup> competencyGroups;
     
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name="PREREQUISITEOF_ID")
+    public Set<Topic> prerequisiteOf;
+    
+    @ManyToMany(mappedBy="prerequisiteOf")
     public Set<Topic> prerequisites;
     
     @Lob
     public String resources;
     
-    //TODO: Set database constraints to ensure that this is not nullable
-    @Column(nullable=false)
-    @Required
-    @OneToMany    
+    @ManyToMany    
     public Set<Level> levels;
 
     public Topic(String title, 
@@ -57,9 +62,32 @@ public class Topic extends Model implements Comparable {
         this.placement = 0;
         this.competencyGroups = new TreeSet<CompetencyGroup>();
         this.prerequisites = new TreeSet<Topic>();
+        this.prerequisiteOf = new TreeSet<Topic>();
         this.levels = new TreeSet<Level>();
     }
 
+    @Override
+    public <T extends JPABase> T save() {
+    	//A topic must have at least one Level
+    	if(this.levels.size() == 0) {
+    		String msg = "Topic does not have any Level objects associated with it";
+    		throw new PersistenceException(msg);
+    	}
+    	//A Topic should not have itself as a pre-requisite
+    	for(Topic topic : this.prerequisites) {
+    		if(topic.id == null) {
+    			String msg = "Attempt to add as a pre-requisite a Topic which has not yet been saved";
+    			throw new PersistenceException(msg);
+    		} else if(this.id != null) { //updating a topic with new pre-erquisites ?
+    			if(topic.id.equals(this.id)) {
+    				String msg = "A Topic cannot have itself as a pre-requisite";
+    				throw new PersistenceException(msg);
+    			}
+    		}
+    	}
+    	return super.save();
+    }
+    
     @Override
 	public int compareTo(Object o) {
 		Topic other = (Topic)o;

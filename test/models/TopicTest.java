@@ -30,6 +30,13 @@ public class TopicTest extends UnitTest {
     	level3.placement = 3;
     	level3.save();
     	
+    	//create a Topic which we will use as a pre-requisite
+    	Topic binary = new Topic("binary", "binary desc", "binary resources");
+    	binary.levels.add(level1);
+    	binary.levels.add(level2);
+    	binary.levels.add(level3);
+    	binary.save();
+    	
     	//create Topic
     	String topicTitle = "Core CS";
     	String topicDesc = "Core CS Description";
@@ -40,11 +47,12 @@ public class TopicTest extends UnitTest {
     	topic.levels.add(level1);
     	topic.levels.add(level2);
     	topic.levels.add(level3);
+    	topic.prerequisites.add(binary);
     	topic.save();
     	
     	List<Topic> retreivedTopics = Topic.findAll();
-    	assertEquals(1, retreivedTopics.size());
-    	Topic retreivedTopic = retreivedTopics.get(0);
+    	assertEquals(2, retreivedTopics.size());
+    	Topic retreivedTopic = retreivedTopics.get(1);
     	assertEquals(topicTitle, retreivedTopic.title);
     	assertEquals(topicDesc, retreivedTopic.description);
     	assertEquals(topicResources, retreivedTopic.resources);
@@ -52,7 +60,7 @@ public class TopicTest extends UnitTest {
     	assertTrue(retreivedTopic.levels.contains(level1));
     	assertTrue(retreivedTopic.levels.contains(level2));
     	assertTrue(retreivedTopic.levels.contains(level3));
-    	assertEquals(0, retreivedTopic.prerequisites.size());
+    	assertEquals(1, retreivedTopic.prerequisites.size());
     	assertEquals(0, retreivedTopic.competencyGroups.size());
     	assertEquals(new Integer(0), retreivedTopic.placement);
     }
@@ -98,13 +106,13 @@ public class TopicTest extends UnitTest {
     	topic.save();
     }
     
-//    @Test(expected=PersistenceException.class)
-//    public void testCreateUnsuccessfullWithoutRequiredLevels() {
-//    	Topic topic = new Topic("Core CS", 
-//    							"Core CS Description", 
-//    							"Core CS Resources");
-//    	topic.save();
-//    }
+    @Test(expected=PersistenceException.class)
+    public void testCreateUnsuccessfullWithoutRequiredLevels() {
+    	Topic topic = new Topic("Core CS", 
+    							"Core CS Description", 
+    							"Core CS Resources");
+    	topic.save();
+    }
     
     @Test
     public void testCompetencyGroupsOrderBy() {
