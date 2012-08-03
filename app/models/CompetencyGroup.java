@@ -1,9 +1,10 @@
 package models;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -17,11 +18,14 @@ public class CompetencyGroup extends Model implements Comparable {
     
 	//TODO: Add database constraint to ensure that this cannot be set to null
 	@Required
-	public String title;
-    
+    @Column(nullable=false)
+    public String title;
+
+	@Lob
 	public String description;
-     
-	public Integer placement;
+
+    @Column(nullable=false)
+    public Integer placement;
     
     @ManyToOne
     public Topic topic;
@@ -29,7 +33,9 @@ public class CompetencyGroup extends Model implements Comparable {
     //TODO: order by placement
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "competencyGroup")
     public Set<Competency> competencies;
-    
+
+    // Note: The CompetencyGroup should not depend on itself.
+
     //TODO: If a CompetencyGroup has been specified as a prerequsite for this
     //CompetencyGroup, then the preerquisite must belong to the same topic
     @OneToMany
@@ -46,8 +52,8 @@ public class CompetencyGroup extends Model implements Comparable {
         this.description = description;
         this.resources = resources;
         this.placement = 0;
-        this.competencies = new HashSet<Competency>();
-        this.prereqisites = new HashSet<CompetencyGroup>();        
+        this.competencies = new TreeSet<Competency>();
+        this.prereqisites = new TreeSet<CompetencyGroup>();        
     }
 
 	@Override
