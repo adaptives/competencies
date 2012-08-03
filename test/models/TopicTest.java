@@ -65,6 +65,37 @@ public class TopicTest extends UnitTest {
     	assertEquals(new Integer(0), retreivedTopic.placement);
     }
     
+    @Test
+    public void testCreateWithoutPrerequisites() {
+    	//create levels
+    	Level level1 = new Level("Level I", "Level I Description");
+    	level1.placement = 1;
+    	level1.save();
+    	Level level2 = new Level("Level II", "Level II Description");
+    	level2.placement = 2;
+    	level2.save();
+    	Level level3 = new Level("Level III", "Level III Description");
+    	level3.placement = 3;
+    	level3.save();
+    	
+    	//create Topic
+    	String topicTitle = "Core CS";
+    	String topicDesc = "Core CS Description";
+    	String topicResources = "Core CS Resources";
+    	Topic topic = new Topic(topicTitle, 
+    							topicDesc, 
+    							topicResources);
+    	topic.levels.add(level1);
+    	topic.levels.add(level2);
+    	topic.levels.add(level3);
+    	topic.save();
+    	
+    	List<Topic> retreivedTopics = Topic.findAll();
+    	assertEquals(1, retreivedTopics.size());
+    	Topic retreivedTopic = retreivedTopics.get(0);
+    	assertEquals(0, retreivedTopic.prerequisites.size());
+    }
+    
     @Test(expected=PersistenceException.class)
     public void testCreateUnsuccessfullWithoutRequiredTitle() {
     	//create levels
@@ -185,6 +216,32 @@ public class TopicTest extends UnitTest {
     		}
     		count++;
     	}
+    }
+    
+    @Test(expected=PersistenceException.class)
+    public void testVerifyUnsuccessfullCreationWithTopicAsItsOwnPrerequisite() {
+    	//create levels
+    	Level level1 = new Level("Level I", "Level I Description");
+    	level1.placement = 1;
+    	level1.save();
+    	Level level2 = new Level("Level II", "Level II Description");
+    	level2.placement = 2;
+    	level2.save();
+    	Level level3 = new Level("Level III", "Level III Description");
+    	level3.placement = 3;
+    	level3.save();
+    	
+    	//create a Topic which we will use as a pre-requisite
+    	Topic binary = new Topic("binary", "binary desc", "binary resources");
+    	binary.levels.add(level1);
+    	binary.levels.add(level2);
+    	binary.levels.add(level3);
+    	binary.save();
+    	
+    	Topic retreivedTopic = Topic.find("select t from Topic t where t.title = ?", "binary").first();
+    	assertNotNull(retreivedTopic);
+    	retreivedTopic.prerequisites.add(retreivedTopic);
+    	retreivedTopic.save();    	
     }
     
     @Test
