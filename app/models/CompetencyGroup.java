@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 
 import play.data.validation.Required;
 import play.db.jpa.Model;
+import utils.StringUtils;
 
 @Entity
 public class CompetencyGroup extends Model implements Comparable {
@@ -21,6 +22,10 @@ public class CompetencyGroup extends Model implements Comparable {
 	@Required
     @Column(nullable=false)
     public String title;
+	
+	//TODO: Test
+	@Column(nullable=false)
+    public String sanitizedTitle;
 
 	@Lob
 	public String description;
@@ -50,6 +55,7 @@ public class CompetencyGroup extends Model implements Comparable {
     					   String resources) {
         super();
         this.title = title;
+        this.sanitizedTitle = StringUtils.replaceSpaceWithDashes(title);
         this.description = description;
         this.resources = resources;
         this.placement = 0;
@@ -57,6 +63,11 @@ public class CompetencyGroup extends Model implements Comparable {
         this.prereqisites = new TreeSet<CompetencyGroup>();        
     }
 
+    public static CompetencyGroup fetchBySanitizedTitle(String sanitizedTitle) {
+    	String query = "select cg from CompetencyGroup cg where cg.sanitizedTitle = ?";
+    	return CompetencyGroup.find(query, sanitizedTitle).first();
+    }
+    
     public List<Competency> fetchCompetenciesForLevel(Level level) {
     	String query = "select c from CompetencyGroup cg join cg.competencies as c where cg.id = ? and c.level.id = ?";
     	return Competency.find(query, this.id, level.id).fetch();
