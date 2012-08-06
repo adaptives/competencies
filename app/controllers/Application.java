@@ -11,9 +11,6 @@ public class Application extends Controller {
 
     public static void index() {
     	List<Topic> topics = Topic.findAll();
-    	for(Topic topic : topics) {
-    		System.out.println("Topic '" + topic + "' has " + topic.competencyGroups.size() + " competency groups");
-    	}
         render(topics);
     }
     
@@ -21,6 +18,12 @@ public class Application extends Controller {
     	CompetencyGroup competencyGroup = CompetencyGroup.fetchBySanitizedTitle(sanitizedTitle);
     	notFoundIfNull(competencyGroup);
     	render(competencyGroup);
+    }
+    
+    public static void competency(String sanitizedTitle) {
+    	Competency competency = Competency.fetchBySanitizedTitle(sanitizedTitle);
+    	notFoundIfNull(competency);
+    	render(competency);
     }
 
 }

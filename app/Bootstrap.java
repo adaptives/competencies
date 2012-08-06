@@ -17,10 +17,7 @@ import utils.ParseException;
 public class Bootstrap extends Job {
 	
 	public void doJob() {
-		System.out.println("In onApplicationStart Job");
 		if(Play.mode == Play.Mode.DEV && Topic.findAll().size() == 0) {
-			System.out.println("Populating the database");
-			
 			//create levels
 			Level level1 = new Level("Level I", "Level I Description");
 			level1.placement = 1;
@@ -47,7 +44,6 @@ public class Bootstrap extends Job {
 				
 				String csvString = sBuff.toString();
 				Topic topic = DataUtils.parseCSV("Core Java", 0, csvString);
-				System.out.println("Saving topics");
 				topic.levels.add(level1);
 				topic.levels.add(level2);
 				topic.levels.add(level3);

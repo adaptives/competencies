@@ -1,0 +1,23 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+<p>
+<h2>${competency.competencyGroup.topic.title} : "${competency.competencyGroup.title} : ${competency.title}</h2>
+
+<h3>Description</h3>
+<div>
+${competency.description}
+</div>
+
+<h3>Pre-requisites</h3>
+<div>
+	#{list items:competency.prerequisites, as:'prerequisites'}
+		<div>${prerequisites.title}</div>
+	#{/list}
+</div>
+
+<h3>Resources</h3>
+<div>
+	${competency.resources}
+</div>
+</p>

@@ -56,6 +56,9 @@ public class Competency extends Model implements Comparable {
     				  Level level,
     				  String resources) {
         super();
+        if(title == null) {
+        	throw new NullPointerException("attribute 'topic' cannot be null");
+        }
         this.title = title;
         this.sanitizedTitle = StringUtils.replaceSpaceWithDashes(title);
         this.description = description;
