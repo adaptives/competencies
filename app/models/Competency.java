@@ -9,8 +9,10 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceException;
 
 import play.data.validation.Required;
+import play.db.jpa.JPABase;
 import play.db.jpa.Model;
 import utils.StringUtils;
 
@@ -84,7 +86,22 @@ public class Competency extends Model implements Comparable {
 			return this.placement - other.placement;
 		}
 	}
+
     
+    @Override
+    public <T extends JPABase> T save() {
+        // Should not add itself as pre-requisite.
+        for (Competency c : prerequisites) {
+            if (c.id == null) {
+                throw new PersistenceException("Attempt to add a pre-requisite Competency which has not been saved.");
+            } else if (this.id != null && this.id == c.id) {
+                throw new PersistenceException("A Competency cannot have itself as pre-requisite");
+            }
+        }
+
+        return super.save();
+    }
+
     @Override
     public String toString() {
     	return this.id + " : " + this.title;
