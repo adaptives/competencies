@@ -66,6 +66,25 @@ public final class CompetencyTest extends UnitTest {
         competency.save();
     }
 
+    @Test (expected = PersistenceException.class)
+    public void testShouldNotAllowItselfAsPreRequisite() {
+        Competency competency = new Competency("Competency 1", "Competency 1 description", group, level1, "Competency 1 resources");
+        competency.sanitizedTitle = null;
+        competency.save();
+
+        competency.prerequisites.add(competency);
+        competency.save();
+    }
+
+    @Test (expected = PersistenceException.class)
+    public void testShouldNotAllowUnsavedPreRequisite() {
+        Competency competency1 = new Competency("Competency 1", "Competency 1 description", group, level1, "Competency 1 resources");
+
+        Competency competency2 = new Competency("Competency 2", "Competency 2 description", group, level2, "Competency 2 resources");
+        competency2.prerequisites.add(competency1);
+        competency2.save();
+    }
+
     @Test
     public void testCompetencyRelationships() {
         Competency competency1 = new Competency("Competency 1", "Competency 1 description", group, level1, "Competency 1 resources");
