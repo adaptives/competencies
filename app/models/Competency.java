@@ -6,6 +6,7 @@ import java.util.TreeSet;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -14,7 +15,7 @@ import play.db.jpa.Model;
 import utils.StringUtils;
 
 @Entity
-public class Competency extends Model {
+public class Competency extends Model implements Comparable {
 		
 	@Required
 	@Column(nullable=false)
@@ -36,6 +37,7 @@ public class Competency extends Model {
     //TODO: Set database constraints to ensure that this is not nullable
     //TODO: Verify that this level is indeed present in the topic to which this competenct belongs
     @Required
+    @ManyToOne
     public Level level;
 
     @Required
@@ -65,7 +67,19 @@ public class Competency extends Model {
         this.prerequisites = new TreeSet<Competency>();
     }
 
-    // TODO: implement compareTo
+    @Override
+	public int compareTo(Object o) {
+		Competency other = (Competency)o;
+		//we do not want to return a 0 if both the placement values are the same
+		//because that will make the TreeSet think these are equal objects and
+		//one of them will not be added. If placements are equal then we 
+		//compare by title
+		if(this.placement == other.placement) {
+			return this.title.compareTo(other.title);
+		} else {
+			return this.placement - other.placement;
+		}
+	}
     
     @Override
     public String toString() {

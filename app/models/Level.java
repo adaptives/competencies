@@ -24,6 +24,11 @@ public class Level extends Model implements Comparable {
 		this.description = description;
 		this.placement = 0;
 	}
+	
+	public static Level findByTitle(String title) {
+		String query = "select l from Level l where l.title = ?";
+		return Level.find(query, title).first();		
+	}
 
 	@Override
 	public int compareTo(Object o) {
