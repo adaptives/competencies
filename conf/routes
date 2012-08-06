@@ -4,6 +4,7 @@
 
 # Home page
 GET     /                                       Application.index
+GET     /competencygroup/{sanitizedTitle}       Application.competencyGroup
 GET		/api/competencies/						CompetencyRestApiController.competencies
 
 # Ignore favicon requests

@@ -17,8 +17,10 @@ public class Application extends Controller {
         render(topics);
     }
     
-    public static void competencyGroup() {
-    	
+    public static void competencyGroup(String sanitizedTitle) {
+    	CompetencyGroup competencyGroup = CompetencyGroup.fetchBySanitizedTitle(sanitizedTitle);
+    	notFoundIfNull(competencyGroup);
+    	render(competencyGroup);
     }
 
 }

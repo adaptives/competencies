@@ -1,0 +1,51 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+<p>
+<h2>${competencyGroup.topic.title} : "${competencyGroup.title}</h2>
+
+<h3>Description</h3>
+<div>
+${competencyGroup.description}
+</div>
+
+<h3>Pre-requisites</h3>
+<div>
+	#{list items:competencyGroup.prereqisites, as:'prereqisite'}
+		<div>${prereqisite.title}</div>
+	#{/list}
+</div>
+
+<h3>Competencies</h3>
+<div>
+	<table class="table table-bordered table-striped responsive-utilities">
+	<thead>
+		<tr>
+			#{list items:competencyGroup.topic.levels, as:'level'}
+				<th>${level.title}</th>	
+			#{/list}
+		</tr>
+	</thead>
+	<tbody>		
+		<tr>			
+			#{list items:competencyGroup.topic.levels, as:'level'}
+				<td>
+					<table class="table table-bordered table-striped responsive-utilities">
+						<tbody>
+							#{list items:competencyGroup.fetchCompetenciesForLevel(level), as:'competency'}
+								<tr><td>${competency.title}&nbsp;</td></tr>
+							#{/list}
+						</tbody>
+					</table>
+				</td>	
+			#{/list}
+		</tr>			
+	</tbody>
+	</table>			
+</div>
+
+<h3>Resources</h3>
+<div>
+	${competencyGroup.resources}
+</div>
+</p>

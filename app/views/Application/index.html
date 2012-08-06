@@ -16,7 +16,7 @@
 	<tbody>
 		#{list items:topic.competencyGroups, as:'competencyGroup'}
 			<tr>
-				<th>${competencyGroup.title}</th>
+				<th><a href="@{Application.competencyGroup(competencyGroup.sanitizedTitle)}">${competencyGroup.title}</a></th>
 				#{list items:topic.levels, as:'level'}
 					<td>
 						<table class="table table-bordered table-striped responsive-utilities">
