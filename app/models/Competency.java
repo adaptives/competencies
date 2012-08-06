@@ -21,7 +21,6 @@ public class Competency extends Model implements Comparable {
 	@Column(nullable=false)
     public String title;       
     
-    //TODO: Set in the constructor... see BlogPost.java in Sole
 	@Column(nullable=false)
     public String sanitizedTitle;
     
@@ -65,6 +64,11 @@ public class Competency extends Model implements Comparable {
         this.resources = resources;
         this.placement = 0;
         this.prerequisites = new TreeSet<Competency>();
+    }
+    
+    public static Competency fetchBySanitizedTitle(String sanitizedTitle) {
+    	String query = "select c from Competency c where c.sanitizedTitle = ?";
+    	return Competency.find(query, sanitizedTitle).first();
     }
 
     @Override

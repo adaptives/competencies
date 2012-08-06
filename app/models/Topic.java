@@ -20,6 +20,7 @@ import javax.persistence.PersistenceException;
 import play.data.validation.Required;
 import play.db.jpa.JPABase;
 import play.db.jpa.Model;
+import utils.StringUtils;
 
 @Entity
 public class Topic extends Model implements Comparable {
@@ -28,6 +29,10 @@ public class Topic extends Model implements Comparable {
 	@Column(nullable=false)
 	public String title;
     
+	//TODO: Test
+	@Column(nullable=false)
+	public String sanitizedTitle;
+		
 	@Lob
 	public String description;
     
@@ -57,6 +62,7 @@ public class Topic extends Model implements Comparable {
     			 String resources) {
         super();
         this.title = title;
+        this.sanitizedTitle = StringUtils.replaceSpaceWithDashes(title);
         this.description = description;
         this.resources = resources;
         this.placement = 0;
@@ -64,6 +70,11 @@ public class Topic extends Model implements Comparable {
         this.prerequisites = new TreeSet<Topic>();
         this.prerequisiteOf = new TreeSet<Topic>();
         this.levels = new TreeSet<Level>();
+    }
+    
+    public static Topic fetchBySanitizedTitle(String sanitizedTitle) {
+    	String query = "select t from Topic t where t.sanitizedTitle = ?";
+    	return Topic.find(query, sanitizedTitle).first();
     }
 
     @Override
