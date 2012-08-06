@@ -1,5 +1,10 @@
 package utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,6 +134,18 @@ public class DataUtilsTest extends UnitTest {
 	}
 	
 	
+	@Test
+	public void testParseCSVFromFile() throws Exception {
+	
+	InputStream is = DataUtilsTest.class.getClassLoader().getResourceAsStream("default-data.csv");	
+	String csv = getFileAsSting(is);
+		
+		Topic topic = DataUtils.parseCSV("test topic", 0, csv);
+		assertNotNull(topic);
+		assertEquals(24, topic.competencyGroups.size());	
+	}
+			
+
 	@Test(expected=ParseException.class)
 	public void testParseCSVUnsuccessfullNoLevelsDefined() throws Exception {
 	String csv =     ", , , ," +
@@ -155,5 +172,22 @@ public class DataUtilsTest extends UnitTest {
 		
 		Topic topic = DataUtils.parseCSV("test topic", 0, csv);
 		assertNotNull(topic);
+	}
+	
+	private String getFileAsSting(InputStream is) throws IOException {
+		StringBuffer sBuff = new StringBuffer();
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(is));			
+			String line = null;
+			while((line = reader.readLine()) != null) {
+				sBuff.append(line + "\n");
+			}
+		} finally {
+			if(reader != null) {
+				reader.close();
+			}
+		}
+		return sBuff.toString();
 	}
 }
