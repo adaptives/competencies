@@ -44,7 +44,8 @@ public class DataUtils {
 								topic.competencyGroups.add(competencyGroup);
 							}							
 							competencyGroup = new CompetencyGroup(token, "desc", "resources");
-							competencyGroup.placement = competencyGroupPlacement++;						
+							competencyGroup.placement = competencyGroupPlacement++;
+							competencyGroup.topic = topic;
 						} else if(i > levels.size()) {
 							String msg = "Unspecified level at line " + lineCnt + " token " + i + "  '" + token + "'";
 							throw new ParseException(msg);
