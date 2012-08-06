@@ -1,5 +1,6 @@
 package models;
 
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -56,6 +57,11 @@ public class CompetencyGroup extends Model implements Comparable {
         this.prereqisites = new TreeSet<CompetencyGroup>();        
     }
 
+    public List<Competency> fetchCompetenciesForLevel(Level level) {
+    	String query = "select c from CompetencyGroup cg join cg.competencies as c where cg.id = ? and c.level.id = ?";
+    	return Competency.find(query, this.id, level.id).fetch();
+    }
+    
 	@Override
 	public int compareTo(Object o) {
 		CompetencyGroup other = (CompetencyGroup)o;

@@ -10,7 +10,15 @@ import models.*;
 public class Application extends Controller {
 
     public static void index() {
-        render();
+    	List<Topic> topics = Topic.findAll();
+    	for(Topic topic : topics) {
+    		System.out.println("Topic '" + topic + "' has " + topic.competencyGroups.size() + " competency groups");
+    	}
+        render(topics);
+    }
+    
+    public static void competencyGroup() {
+    	
     }
 
 }
