@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import models.Level;
 import models.Topic;
 
+import play.Logger;
 import play.Play;
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
@@ -16,6 +17,8 @@ import utils.ParseException;
 @OnApplicationStart
 public class Bootstrap extends Job {
 	
+	public static final org.apache.log4j.Logger cLogger = Logger.log4j.getLogger(Bootstrap.class);
+			
 	public void doJob() {
 		if(Play.mode == Play.Mode.DEV && Topic.findAll().size() == 0) {
 			//create levels
@@ -49,9 +52,9 @@ public class Bootstrap extends Job {
 				topic.levels.add(level3);
 				topic.save();
 			} catch(IOException ioe) {
-				System.out.println("caught IOException while parsing default data " + ioe);
+				cLogger.error("caught IOException while parsing default data ", ioe);
 			} catch(ParseException pe) {
-				System.out.println("caught ParseException while parsing default data " + pe);
+				cLogger.error("caught ParseException while parsing default data ", pe);
 			} finally {
 				if(reader != null) {
 					try { reader.close(); } catch(IOException ioe) {}
