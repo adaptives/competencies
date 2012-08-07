@@ -67,6 +67,13 @@ public final class CompetencyTest extends UnitTest {
     }
 
     @Test (expected = PersistenceException.class)
+    public void testCreateUnsuccessfullWithoutRequiredPlacement() {
+        Competency competency = new Competency("Competency 1", "Competency 1 description", group, level1, "Competency 1 resources");
+        competency.placement = null;
+        competency.save();
+    }
+
+    @Test (expected = PersistenceException.class)
     public void testShouldNotAllowItselfAsPreRequisite() {
         Competency competency = new Competency("Competency 1", "Competency 1 description", group, level1, "Competency 1 resources");
         competency.sanitizedTitle = null;
