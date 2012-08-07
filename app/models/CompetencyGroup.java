@@ -72,7 +72,12 @@ public class CompetencyGroup extends Model implements Comparable {
     	String query = "select c from CompetencyGroup cg join cg.competencies as c where cg.id = ? and c.level.id = ?";
     	return Competency.find(query, this.id, level.id).fetch();
     }
-    
+
+    public static CompetencyGroup findByTitle(String title) {
+        String query = "select g from CompetencyGroup g where g.title = ?";
+        return find(query, title).first();
+    }
+
 	@Override
 	public int compareTo(Object o) {
 		CompetencyGroup other = (CompetencyGroup)o;
