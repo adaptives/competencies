@@ -15,7 +15,8 @@ public class Level extends Model implements Comparable {
 	public String title;
 	
 	public String description;
-	
+
+	@Column(nullable = false)
 	public Integer placement;
 	
 	public Level(String title,

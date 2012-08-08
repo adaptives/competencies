@@ -2,6 +2,8 @@ package models;
 
 import java.util.Set;
 
+import javax.persistence.PersistenceException;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -71,5 +73,89 @@ public final class CompetencyGroupTest extends UnitTest {
         }
 
         return false;
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void testCreateUnsuccessfullWithoutRequiredTitle() {
+        CompetencyGroup cg = new CompetencyGroup("Collections", "Java Collections API", "Collection resources");
+        cg.topic = java;
+        cg.title = null;
+        cg.save();
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void testCreateUnsuccessfullWithoutRequiredSanitizedTitle() {
+        CompetencyGroup cg = new CompetencyGroup("Collections", "Java Collections API", "Collection resources");
+        cg.topic = java;
+        cg.sanitizedTitle = null;
+        cg.save();
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void testCreateUnsuccessfullWithoutRequiredPlacement() {
+        CompetencyGroup cg = new CompetencyGroup("Collections", "Java Collections API", "Collection resources");
+        cg.topic = java;
+        cg.placement = null;
+        cg.save();
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void testCreateUnsuccessfullWithoutRequiredTopic() {
+        CompetencyGroup cg = new CompetencyGroup("Collections", "Java Collections API", "Collection resources");
+        // Already null, this is simply for clarity.
+        cg.topic = null;
+        cg.save();
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void testShouldNotAllowItselfAsPreRequisite() {
+        CompetencyGroup cg = null;
+
+        try {
+            cg = new CompetencyGroup("Collections", "Java Collections API", "Collection resources");
+            cg.topic = java;
+            cg.save();
+        } catch (PersistenceException pe) {
+            // Ensuring that we are able to save successfully first and
+            // exception originating from this is not marking the test as
+            // passed.
+            pe.printStackTrace();
+            Assert.fail("Not expecting the save to fail here. Failure Cause: " + pe.getMessage());
+        }
+
+        cg.prereqisites.add(cg);
+        cg.save();
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void testShouldNotAllowPreRequisiteHavingDifferentTopic() {
+        CompetencyGroup cg = null;
+        CompetencyGroup p = null;
+
+        try {
+            cg = new CompetencyGroup("Collections", "Java Collections API", "Collection resources");
+            cg.topic = java;
+            cg.save();
+
+            Topic html = new Topic("HTML", "Hyper Text Markup Language", "HTML resources");
+            html.levels.add(level1);
+            html.levels.add(level2);
+            html.levels.add(level3);
+            html.save();
+
+            p = new CompetencyGroup("Motivation", "Motivation behind HTML", "HTML Motivation resources");
+            p.topic = html;
+            p.save();
+        } catch (PersistenceException pe) {
+            // Ensuring that we are able to save successfully first and
+            // exception originating from this is not marking the test as
+            // passed.
+            pe.printStackTrace();
+            Assert.fail("Not expecting the save to fail here. Failure Cause: "+ pe.getMessage());
+        }
+
+        // Adding a pre-requisite with a different topic.
+        cg.prereqisites.add(p);
+        cg.save();
     }
 }
