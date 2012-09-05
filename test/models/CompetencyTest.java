@@ -14,7 +14,7 @@ public final class CompetencyTest extends UnitTest {
     private Level level1;
     private Level level2;
     private Level level3;
-
+    private Topic topic;
     private CompetencyGroup group;
 
     @Before
@@ -30,7 +30,14 @@ public final class CompetencyTest extends UnitTest {
         level3 = new Level("Level III", "Level III description");
         level3.save();
 
+        topic = new Topic("topic", "topic desc", "topic resources");
+        topic.levels.add(level1);
+        topic.levels.add(level2);
+        topic.levels.add(level3);
+        topic.save();
+    	
         group = new CompetencyGroup("Group 1", "Group 1 description", "Group 1 resources");
+        group.topic = this.topic;
         group.save();
     }
 
