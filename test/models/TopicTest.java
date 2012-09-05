@@ -96,7 +96,7 @@ public class TopicTest extends UnitTest {
     	assertEquals(0, retreivedTopic.prerequisites.size());
     }
     
-    @Test(expected=PersistenceException.class)
+    @Test(expected=NullPointerException.class)
     public void testCreateUnsuccessfullWithoutRequiredTitle() {
     	//create levels
     	Level level1 = new Level("Level I", "Level I Description");

@@ -61,6 +61,9 @@ public class Topic extends Model implements Comparable {
     			 String description,
     			 String resources) {
         super();
+        if(title == null) {
+        	throw new NullPointerException("title cannot be null");
+        }
         this.title = title;
         this.sanitizedTitle = StringUtils.replaceSpaceWithDashes(title);
         this.description = description;
