@@ -1,0 +1,9 @@
+a.competency {
+  color: #626266;
+  text-decoration: none;
+}
+
+a.competency:hover {
+  color: #32742C;
+  text-decoration: underline;
+}

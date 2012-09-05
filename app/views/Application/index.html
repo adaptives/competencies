@@ -22,7 +22,7 @@
 						<table class="table table-bordered table-striped responsive-utilities">
 							<tbody>
 								#{list items:competencyGroup.fetchCompetenciesForLevel(level), as:'competency'}
-									<tr><td><a href="@{Application.competency(competency.sanitizedTitle)}">${competency.title}</a>&nbsp;</td></tr>
+									<tr><td><a class="competency" href="@{Application.competency(competency.sanitizedTitle)}">${competency.title}</a>&nbsp;</td></tr>
 								#{/list}
 							</tbody>
 						</table>
